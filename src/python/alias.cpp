@@ -20,6 +20,7 @@
 #include <mitsuba/core/config.h>
 #include <mitsuba/mitsuba.h>
 #include <nanobind/nanobind.h>
+#include <iostream>
 
 namespace nb = nanobind;
 
