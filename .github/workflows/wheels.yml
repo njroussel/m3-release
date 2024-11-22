@@ -75,7 +75,7 @@ jobs:
         if: ${{ ! endsWith(matrix.python, '_stable') && runner.os == 'Windows' }}
         run: |
           echo "CIBW_BUILD=${{ matrix.python }}-*" >> $env:GITHUB_ENV
-          echo "CIBW_CONFIG_SETTINGS=cmake.args='-DMI_DEFAULT_VARIANTS='scalar_rgb,scalar_spectral,llvm_ad_rgb,llvm_ad_spectral,cuda_ad_rgb''" >> $env:GITHUB_ENV
+          echo "CIBW_CONFIG_SETTINGS=cmake.args='-DMI_DEFAULT_VARIANTS='scalar_rgb,cuda_ad_rgb''" >> $env:GITHUB_ENV
 
       - name: Prepare cibuildwheel environment for stable ABI wheel (UNIX)
         if: ${{ endsWith(matrix.python, '_stable') && runner.os != 'Windows' }}
