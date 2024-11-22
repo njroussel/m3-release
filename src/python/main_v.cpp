@@ -14,6 +14,7 @@
 #include <mitsuba/render/volume.h>
 
 #include <mitsuba/python/python.h>
+#include <iostream>
 
 
 #define PY_TRY_CAST(Type)                                                      \
@@ -120,6 +121,7 @@ using Caster = nb::object(*)(mitsuba::Object *);
 Caster cast_object = nullptr;
 
 NB_MODULE(MI_VARIANT_NAME, m) {
+    std::cout << "Inside main.cpp 0" << std::endl;
     m.attr("__name__") = "mitsuba";
 
     // Create sub-modules
@@ -138,6 +140,9 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     quad.doc()    = "Functions for numerical quadrature";
     mueller.doc() = "Routines to manipulate Mueller matrices for polarized rendering.";
 
+
+    std::cout << "Inside main.cpp 1" << std::endl;
+
     // FIXME: we don't really need a list of casters
     /// Initialize the list of casters
     nb::object mitsuba_ext = nb::module_::import_("mitsuba.mitsuba_ext");
@@ -151,25 +156,34 @@ NB_MODULE(MI_VARIANT_NAME, m) {
 
     MI_PY_IMPORT(DrJit);
 
+    std::cout << "Inside main.cpp 2" << std::endl;
+
+
     // TODO: Add documentation
     m.attr("is_monochromatic") = is_monochromatic_v<Spectrum>;
     m.attr("is_rgb") = is_rgb_v<Spectrum>;
     m.attr("is_spectral") = is_spectral_v<Spectrum>;
     m.attr("is_polarized") = is_polarized_v<Spectrum>;
 
+
+    std::cout << "Inside main.cpp 3" << std::endl;
+
     MI_PY_IMPORT(Object);
     MI_PY_IMPORT(Ray);
     MI_PY_IMPORT(BoundingBox);
     MI_PY_IMPORT(BoundingSphere);
+    std::cout << "Inside main.cpp 4" << std::endl;
     MI_PY_IMPORT(Frame);
     MI_PY_IMPORT(DiscreteDistribution);
     MI_PY_IMPORT(DiscreteDistribution2D);
     MI_PY_IMPORT(ContinuousDistribution);
+    std::cout << "Inside main.cpp 5" << std::endl;
     MI_PY_IMPORT(IrregularContinuousDistribution);
     MI_PY_IMPORT_SUBMODULE(math);
     MI_PY_IMPORT(qmc);
     MI_PY_IMPORT(Properties);
     MI_PY_IMPORT(rfilter);
+    std::cout << "Inside main.cpp 6" << std::endl;
     MI_PY_IMPORT(sample_tea);
     MI_PY_IMPORT_SUBMODULE(spline);
     MI_PY_IMPORT(Spectrum);
@@ -178,6 +192,7 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     MI_PY_IMPORT(Hierarchical2D);
     MI_PY_IMPORT(Marginal2D);
     MI_PY_IMPORT(vector);
+    std::cout << "Inside main.cpp 7" << std::endl;
     MI_PY_IMPORT_SUBMODULE(quad);
     MI_PY_IMPORT_SUBMODULE(warp);
     MI_PY_IMPORT(xml);
@@ -185,12 +200,14 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     MI_PY_IMPORT(Scene);
     MI_PY_IMPORT(Shape);
     MI_PY_IMPORT(Medium);
+    std::cout << "Inside main.cpp 8" << std::endl;
     MI_PY_IMPORT(Endpoint);
     MI_PY_IMPORT(Emitter);
     MI_PY_IMPORT(Interaction);
     MI_PY_IMPORT(SurfaceInteraction);
     MI_PY_IMPORT(MediumInteraction);
     MI_PY_IMPORT(PreliminaryIntersection);
+    std::cout << "Inside main.cpp 9" << std::endl;
     MI_PY_IMPORT(PositionSample);
     MI_PY_IMPORT(SilhouetteSample);
     MI_PY_IMPORT(DirectionSample);
@@ -198,6 +215,7 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     MI_PY_IMPORT(BSDF);
     MI_PY_IMPORT(Film);
     MI_PY_IMPORT(fresnel);
+    std::cout << "Inside main.cpp 10" << std::endl;
     MI_PY_IMPORT(ImageBlock);
     MI_PY_IMPORT(Integrator);
     MI_PY_IMPORT_SUBMODULE(mueller);
@@ -207,6 +225,7 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     MI_PY_IMPORT(OptixDenoiser);
 #endif // defined(MI_ENABLE_CUDA)
     MI_PY_IMPORT(PhaseFunction);
+    std::cout << "Inside main.cpp 11" << std::endl;
     MI_PY_IMPORT(Sampler);
     MI_PY_IMPORT(Sensor);
 //    MI_PY_IMPORT(ShapeKDTree);
@@ -214,6 +233,7 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     MI_PY_IMPORT(Texture);
     MI_PY_IMPORT(Volume);
     MI_PY_IMPORT(VolumeGrid);
+    std::cout << "Inside main.cpp 21" << std::endl;
 
     /* Callback function cleanup static variant-specific data structures, this
      * should be called when the interpreter is exiting */
@@ -227,6 +247,7 @@ NB_MODULE(MI_VARIANT_NAME, m) {
         Scene::static_accel_shutdown();
     }));
 
+    std::cout << "Inside main.cpp 12" << std::endl;
     /* Make this a package, thus allowing statements such as:
      * `from mitsuba.scalar_rgb.test.util import function`
      * For that we `__path__` needs to be populated. We do it by using the
@@ -235,15 +256,19 @@ NB_MODULE(MI_VARIANT_NAME, m) {
     nb::module_ os = nb::module_::import_("os");
     nb::module_ cfg = nb::module_::import_("mitsuba.config");
     nb::object cfg_path = os.attr("path").attr("realpath")(cfg.attr("__file__"));
+    std::cout << "Inside main.cpp 13" << std::endl;
     nb::object mi_dir = os.attr("path").attr("dirname")(cfg_path);
     nb::object mi_py_dir = os.attr("path").attr("join")(mi_dir, "python");
     nb::list paths{};
     paths.append(nb::str(mi_dir));
     paths.append(nb::str(mi_py_dir));
+    std::cout << "Inside main.cpp 14" << std::endl;
     m.attr("__path__") = paths;
 
 
     color_management_static_initialization(dr::is_cuda_v<Float>,
                                            dr::is_llvm_v<Float>);
+    std::cout << "Inside main.cpp 15" << std::endl;
     Scene::static_accel_initialization();
+    std::cout << "Inside main.cpp 16" << std::endl;
 }
