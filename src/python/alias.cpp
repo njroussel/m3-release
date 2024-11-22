@@ -65,7 +65,9 @@ nb::object import_with_deepbind_if_necessary(const char* name) {
     }
 #endif
 
+    std::cout << "Importing " << name << "..." << std::endl;
     nb::object out = nb::module_::import_(name);
+    std::cout << "Imported " << name << "!" << std::endl;
 
 #if defined(__clang__) && !defined(__APPLE__)
     if (!std::getenv("DRJIT_NO_RTLD_DEEPBIND"))
@@ -122,7 +124,9 @@ static void set_variant(nb::args args) {
 
     std::cout << "Third" << std::endl;
     if (!curr_variant.equal(new_variant)) {
+        std::cout << "3.1" << std::endl;
         nb::object new_variant_module = variant_module(new_variant);
+        std::cout << "3.2" << std::endl;
 
         nb::dict variant_dict = new_variant_module.attr("__dict__");
         for (const auto &k : variant_dict.keys())
@@ -130,6 +134,7 @@ static void set_variant(nb::args args) {
                 !nb::bool_(k.attr("endswith")("__")))
                 Safe_PyDict_SetItem(mi_dict, k.ptr(),
                     PyDict_GetItem(variant_dict.ptr(), k.ptr()));
+        std::cout << "3.3" << std::endl;
 
         nb::object old_variant = curr_variant;
 
@@ -139,12 +144,14 @@ static void set_variant(nb::args args) {
             nb::module_ mi_python = nb::module_::import_("mitsuba.python.ad.integrators");
             nb::steal(PyImport_ReloadModule(mi_python.ptr()));
         }
+        std::cout << "3.4" << std::endl;
 
         // Only invoke callbacks after Mitsuba plugins have reloaded as there
         // may be a dependency
         const auto &callbacks = nb::borrow<nb::set>(variant_change_callbacks);
         for (const auto &cb : callbacks)
             cb(old_variant, new_variant);
+        std::cout << "3.5" << std::endl;
     }
 
     std::cout << "Fourth" << std::endl;
