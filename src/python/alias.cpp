@@ -95,6 +95,7 @@ static nb::object variant_module(nb::handle variant) {
 
 /// Sets the variant
 static void set_variant(nb::args args) {
+    std::cout << "First" << std::endl;
     nb::object new_variant{};
     for (auto arg : args) {
         // Find the first valid & compiled variant in the arguments
@@ -104,6 +105,8 @@ static void set_variant(nb::args args) {
         }
     }
 
+
+    std::cout << "Second" << std::endl;
     if (!new_variant) {
         nb::object all_args(nb::str(", ").attr("join")(args));
         nb::object all_variants(
@@ -116,6 +119,7 @@ static void set_variant(nb::args args) {
         );
     }
 
+    std::cout << "Third" << std::endl;
     if (!curr_variant.equal(new_variant)) {
         nb::object new_variant_module = variant_module(new_variant);
 
@@ -140,8 +144,9 @@ static void set_variant(nb::args args) {
         const auto &callbacks = nb::borrow<nb::set>(variant_change_callbacks);
         for (const auto &cb : callbacks)
             cb(old_variant, new_variant);
-
     }
+
+    std::cout << "Fourth" << std::endl;
 }
 
 /**
@@ -183,6 +188,8 @@ static nb::object get_attr(nb::handle key) {
 NB_MODULE(mitsuba_alias, m) {
     m.attr("__name__") = "mitsuba";
     m.attr("__version__")      = MI_VERSION;
+
+    std::cout << "HELLO INSIDE ALIAS.CPP" << std::endl;
 
     curr_variant = nb::none();
     variant_change_callbacks = nb::set();
